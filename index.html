@@ -144,12 +144,11 @@
   .scenes figure.wide { grid-column:1 / -1; }
   .scenes figure.wide .stage { font-size:calc(100cqw / 90); }
   .studio .t14 { white-space:nowrap; }
-  .scenes figcaption { padding:14px 4px 0; }
-  .scenes figcaption b { font-size:18px; }
-  .scenes figcaption q { display:block; color:var(--ink2); font-size:15.5px; margin-top:3px; quotes:"«" "»"; }
+  .said { position:absolute; left:2em; bottom:2em; z-index:6; margin:0; max-width:70%; background:#fff; color:#0b0d10; font-size:1.55em; font-weight:600; line-height:1.3; padding:.55em .95em; border-radius:1.1em 1.1em 1.1em .25em; box-shadow:0 .6em 1.6em #00000059; }
+  .scenes figure.wide .said { font-size:1.2em; }
   .scene { container-type:inline-size; border-radius:16px; overflow:hidden; border:1px solid #23272d; }
   .stage { position:relative; font-size:calc(100cqw / 60); aspect-ratio:16/10; overflow:hidden; color:#1d1d1f;
-    background:radial-gradient(110% 90% at 15% 0%, #2a6aa8 0, transparent 60%), radial-gradient(90% 80% at 100% 100%, #3b2a6b 0, transparent 65%), #0e1a2c; }
+    background:radial-gradient(110% 90% at 15% 0%, #2a6aa8 0, transparent 60%), radial-gradient(90% 80% at 100% 100%, #0f4a6e 0, transparent 65%), #0e1a2c; }
     .mbar { position:absolute; inset:0 0 auto; height:3.2em; background:#0000004d; }
   .mbar i { position:absolute; top:1.25em; height:.7em; border-radius:1em; background:#ffffffa6; }
   .hw { position:absolute; left:50%; top:0; translate:-50% 0; width:19em; height:3.2em; background:#000; border-radius:0 0 1.1em 1.1em; z-index:2; }
@@ -285,6 +284,47 @@
   .blue .pill.ghost { background:transparent; color:var(--night); box-shadow:inset 0 0 0 2px var(--night); }
   .final.blue + footer { border-top:0; }
   .final.blue .dolphin { width:170px; height:170px; aspect-ratio:auto; padding:31px 17px; border-radius:50%; background:url(flip-sprite.webp) 0 0 / 300% 100% no-repeat content-box, #000; box-shadow:0 18px 40px #061c3340; margin-bottom:18px; }
+
+  /* notch interattiva della hero */
+  .notch { display:block; cursor:pointer; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; touch-action:none; transition:width .5s cubic-bezier(.3,1.35,.5,1); z-index:2; }
+  .nline { display:flex; align-items:center; gap:12px; }
+  .nline #nlabel { flex:1; text-align:left; white-space:nowrap; }
+  .notch .dots { display:none; font-size:10px; }
+  .notch[data-mode="thinking"] .wave { display:none; }
+  .notch[data-mode="thinking"] .dots { display:flex; }
+  .notch:not([data-mode="listening"]):not([data-mode="answer"]) .wave i { animation-play-state:paused; }
+  .notch[data-mode="idle"] #nlabel { color:#ffffffa3; font-weight:500; }
+  .notch[data-mode="answer"], .notch[data-mode="said"] { width:min(440px, 92vw); }
+  .notch[data-mode="said"] .nline { display:none; }
+  #nans { display:none; margin:8px 0 0; font-size:14px; line-height:1.5; color:#ffffffa3; text-align:left; font-weight:400; }
+  .notch[data-mode="answer"] #nans, .notch[data-mode="said"] #nans { display:block; }
+  .notch[data-mode="said"] #nans { margin-top:2px; }
+  .notch[data-mode="listening"] { box-shadow:0 14px 40px #000, 0 0 0 1px #4fa7ee55; }
+  /* delfino che vola e segno sul pulsante */
+  .heroink { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:3; overflow:visible; }
+  .heroink path { fill:none; stroke:#4fa7eef2; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 3px #00000059); stroke-dasharray:1; stroke-dashoffset:1; }
+  .heroink.go path { transition:stroke-dashoffset 1s ease-in-out; stroke-dashoffset:0; }
+  .heroink.gone { transition:opacity .5s; opacity:0; }
+  .flyer { position:absolute; left:0; top:0; width:72px; z-index:4; pointer-events:none; transform-origin:0 0; }
+  .flyer .bubble { right:52px; left:auto; top:-24px; opacity:0; transition:opacity .3s; font-size:14px; }
+  .flyer.said .bubble { opacity:1; }
+
+  /* cursore a goccia: la punta è il punto che clicca */
+  html { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 2.5C14 2.5 5.5 12.6 5.5 18.2a8.5 8.5 0 0 0 17 0C22.5 12.6 14 2.5 14 2.5z' fill='%234fa7ee' stroke='%23061c33' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cellipse cx='10.6' cy='18.6' rx='1.7' ry='3' fill='%23fff' opacity='.75' transform='rotate(-18 10.6 18.6)'/%3E%3C/svg%3E") 14 3, auto; }
+  a, button, summary, label, .notch, [data-dl], [data-plan] { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 2.5C14 2.5 5.5 12.6 5.5 18.2a8.5 8.5 0 0 0 17 0C22.5 12.6 14 2.5 14 2.5z' fill='%238cc8f7' stroke='%23061c33' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cellipse cx='10.6' cy='18.6' rx='1.7' ry='3' fill='%23fff' opacity='.75' transform='rotate(-18 10.6 18.6)'/%3E%3C/svg%3E") 14 3, pointer; }
+  input, textarea { cursor:text; }
+  .splash { position:fixed; left:0; top:0; pointer-events:none; z-index:1000; }
+  .splash i { position:absolute; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff 0 18%, #4fa7ee 22%); }
+  .splash b { position:absolute; border-radius:50%; border:2px solid #4fa7ee; }
+
+  /* pressione al clic, entrata della hero, una sezione per schermata */
+  .pill:active { transform:translateY(0) scale(.97); filter:brightness(.95); }
+  .hero h1, .hero .tag, .hero .cta, .hero .req { animation:enter .8s cubic-bezier(.2,.7,.2,1) both; }
+  .hero .tag { animation-delay:.08s; } .hero .cta { animation-delay:.16s; } .hero .req { animation-delay:.22s; }
+  @keyframes enter { from { opacity:0; translate:0 14px; } }
+  @media (min-width:761px) and (min-height:640px) {
+    main > section { min-height:100svh; display:flex; flex-direction:column; justify-content:center; }
+  }
   @media (max-width:1000px) { .plans { grid-template-columns:1fr 1fr; } }
   @media (max-width:760px) {
     .howto, .plans, .trio, .split { grid-template-columns:1fr; }
@@ -295,7 +335,8 @@
     .scenes { grid-template-columns:1fr; }
     .scenes figure.wide .stage { font-size:calc(100cqw / 60); }
     nav .links { display:none; }
-    nav .pill { margin-left:auto; }
+    nav .pill { margin-left:auto; min-height:44px; }
+    .os .pill { min-height:44px; }
     .steps, .install, .lasso { grid-template-columns:1fr; }
     .cta .pill { width:100%; }
     .bubble { right:-4px; top:-18px; font-size:14px; }
@@ -303,7 +344,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior:auto; }
-    .wave i, .talk, .hero .big, .draw, .bars i, .dots i, .orb { animation:none; }
+    .wave i, .talk, .hero .big, .draw, .bars i, .dots i, .orb, .hero h1, .hero .tag, .hero .cta, .hero .req { animation:none; }
     .ink path { animation:none; stroke-dashoffset:0; }
     .draw { stroke-dashoffset:0; }
     .pill { transition:none; }
@@ -329,7 +370,10 @@
 </nav>
 
 <header class="hero">
-  <div class="notch" aria-hidden="true"><span class="dolphin talk mini"></span><span>Ti ascolto</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+  <div class="notch" id="notch" role="button" tabindex="-1" aria-label="Prova Flip: tieni premuto la barra spaziatrice o la notch">
+    <div class="nline"><span class="dolphin mini" id="nface"></span><span id="nlabel">Prova: tieni premuto Spazio</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><span class="dots"><i></i><i></i><i></i></span></div>
+    <p id="nans" aria-live="polite"></p>
+  </div>
   <div class="dolphin big" role="img" aria-label="Il delfino di Flip che parla"><span class="bubble" aria-hidden="true">Ciao, sono Flip!</span></div>
   <h1>Flip</h1>
   <p class="tag">Parla al tuo computer. <span>Lui guarda lo schermo, ti risponde, ti indica dove guardare e fa le cose al posto tuo.</span></p>
@@ -343,7 +387,6 @@
 <main class="wrap">
 
   <section id="cosa-fa" class="light">
-    <p class="kicker">Cosa fa</p>
     <h2>Un assistente che vede quello che vedi tu.</h2>
     <p class="sub">Sul Mac vive nella notch. Su Windows può apparire come notch, pallino o Dynamic Island.</p>
     <div class="verbs">
@@ -361,7 +404,7 @@
     <p class="sub">Così si presenta Flip sul Mac mentre lavora: stessi colori, stesse parole, stessi segni.</p>
     <div class="scenes">
 
-      <figure>
+      <figure aria-label="Risponde: «Cosa fa questa formula?»">
         <div class="scene"><div class="stage" aria-hidden="true">
           <div class="mbar"><i style="left:1.6em;width:2em"></i><i style="left:5em;width:4em"></i><i style="right:1.6em;width:5em"></i></div>
           <div class="win" style="left:5em;right:5em;top:12.5em;bottom:-2em">
@@ -378,11 +421,12 @@
             <div class="nrow"><span class="t14">Sto parlando</span><span class="sp"></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
             <p class="ans" style="margin-bottom:0">Somma le vendite della colonna C, ma solo nelle righe in cui la regione è Nord.</p>
           </div>
+        
+          <p class="said">«Cosa fa questa formula?»</p>
         </div></div>
-        <figcaption><b>Risponde</b><q>Cosa fa questa formula?</q></figcaption>
       </figure>
 
-      <figure>
+      <figure aria-label="Indica: «Dove cambio il suono degli avvisi?»">
         <div class="scene"><div class="stage" aria-hidden="true">
           <div class="mbar"><i style="left:1.6em;width:2em"></i><i style="left:5em;width:4em"></i><i style="right:1.6em;width:5em"></i></div>
           <div class="win" style="left:6em;right:6em;top:11.5em;bottom:-2em">
@@ -400,11 +444,12 @@
             <p class="ans" style="margin:0">È qui, nella colonna a sinistra: Suoni.</p>
           </div>
           <svg class="ink" viewBox="0 0 600 375" data-mark data-arrow><path pathLength="1"/></svg>
+        
+          <p class="said">«Dove cambio il suono degli avvisi?»</p>
         </div></div>
-        <figcaption><b>Indica</b><q>Dove cambio il suono degli avvisi?</q></figcaption>
       </figure>
 
-      <figure>
+      <figure aria-label="Agisce, e prima chiede: «Scrivi a Marco che arrivo alle tre.»">
         <div class="scene"><div class="stage" aria-hidden="true">
           <div class="mbar"><i style="left:1.6em;width:2em"></i><i style="left:5em;width:4em"></i><i style="right:1.6em;width:5em"></i></div>
           <div class="win" style="left:3em;right:3em;top:20em;bottom:-2em"><div class="tb"><i></i><i></i><i></i><b>Mail</b></div><div class="ln" style="width:50%"></div><div class="ln" style="width:80%"></div></div>
@@ -420,11 +465,12 @@
               <div class="tog"><i></i><span class="t13">Non chiedere più conferme</span></div>
             </div>
           </div>
+        
+          <p class="said">«Scrivi a Marco che arrivo alle tre.»</p>
         </div></div>
-        <figcaption><b>Agisce, e prima chiede</b><q>Scrivi a Marco che arrivo alle tre.</q></figcaption>
       </figure>
 
-      <figure>
+      <figure aria-label="Cerca: «Che tempo farà domani a Bologna?»">
         <div class="scene"><div class="stage" aria-hidden="true">
           <div class="mbar"><i style="left:1.6em;width:2em"></i><i style="left:5em;width:4em"></i><i style="right:1.6em;width:5em"></i></div>
           <div class="win" style="left:5em;right:5em;top:6.5em;bottom:-2em">
@@ -437,11 +483,12 @@
           <div class="nt" style="--w:37em">
             <div class="nrow"><span class="t13" style="font-weight:500">Leggo 6 fonti…</span><span class="sp"></span><span class="t13 i3">2/3</span><span class="dots"><i></i><i></i><i></i></span></div>
           </div>
+        
+          <p class="said">«Che tempo farà domani a Bologna?»</p>
         </div></div>
-        <figcaption><b>Cerca</b><q>Che tempo farà domani a Bologna?</q></figcaption>
       </figure>
 
-      <figure class="wide">
+      <figure class="wide" aria-label="Crea: «Fammi vedere come girano i pianeti.»">
         <div class="scene"><div class="stage" aria-hidden="true" style="aspect-ratio:16/8">
           <div class="mbar"><i style="left:1.6em;width:2em"></i><i style="left:5em;width:4em"></i><i style="right:1.6em;width:5em"></i></div>
           <div class="hw"></div>
@@ -455,15 +502,15 @@
               <div class="orb" style="width:24em;height:24em;margin:-12em;animation-duration:18s"><i style="background:#d8653f;width:.8em;height:.8em;margin-left:-.4em;top:-.4em"></i></div>
             </div>
           </div>
+        
+          <p class="said">«Fammi vedere come girano i pianeti.»</p>
         </div></div>
-        <figcaption><b>Crea</b><q>Fammi vedere come girano i pianeti.</q></figcaption>
       </figure>
 
     </div>
   </section>
 
   <section id="come-si-usa" class="light">
-    <p class="kicker">Come si usa</p>
     <h2>Tieni premuto, parla, rilascia.</h2>
     <p class="sub">Niente finestre da aprire: Flip è sempre lì, pronto quando premi il tasto.</p>
     <div class="steps">
@@ -487,7 +534,6 @@
   </section>
 
   <section id="intelligenza">
-    <p class="kicker">Dove gira l'intelligenza</p>
     <h2>Scegli tu dove pensa Flip.</h2>
     <p class="sub">Lo scegli al primo avvio, nella guida.</p>
     <div class="trio">
@@ -499,8 +545,7 @@
   </section>
 
   <section id="gratis" class="light">
-    <p class="kicker">Gratis e senza internet</p>
-    <h2>Flip può lavorare tutto sul tuo computer. Gratis.</h2>
+    <h2>Tutto sul tuo computer, gratis e senza internet.</h2>
     <p class="sub">Niente abbonamento, niente account, niente costi a consumo. E quello che dici o hai sullo schermo non esce dal computer.</p>
     <div class="grid">
       <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 3 5 3 3 0 0 0 5 1V5a3 3 0 0 0-3-1zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-3 5 3 3 0 0 1-5 1"/></svg></div><h3>Il «cervello» è un modello</h3><p>Ciò che capisce le tue domande e guarda lo schermo si chiama modello di intelligenza artificiale. Di solito gira su computer lontani, in rete. Puoi invece tenerlo sul tuo.</p></div>
@@ -527,8 +572,7 @@
   </section>
 
   <section id="piani" class="center">
-    <p class="kicker">Piani</p>
-    <h2>Gratis per sempre. Più veloce con un piano.</h2>
+    <h2>Gratis per sempre, più veloce con un piano.</h2>
     <p class="sub">Con un piano ricevi un codice di accesso: Flip usa modelli in rete più veloci e capaci, senza chiavi da configurare.</p>
     <div class="plans">
       <div class="plan">
@@ -562,7 +606,6 @@
   <section id="privacy" class="light">
     <div class="split">
     <div>
-    <p class="kicker">Privacy e conferme</p>
     <h2>Tu decidi, lui esegue.</h2>
     <p class="sub">Flip fa molto da solo, ma non le cose che non si possono annullare.</p>
     <div class="mini-ui" aria-hidden="true">
@@ -583,8 +626,7 @@
   </section>
 
   <section id="installazione">
-    <p class="kicker">Installazione</p>
-    <h2>Pochi passi, una volta sola.</h2>
+    <h2>Installare Flip: pochi passi, una volta sola.</h2>
     <p class="sub">È una versione di prova: funziona, ma aspettati imperfezioni.</p>
     <div class="install">
       <div class="os">
@@ -615,8 +657,7 @@
   </section>
 
   <section id="domande" class="light">
-    <p class="kicker">Domande frequenti</p>
-    <h2>In breve.</h2>
+    <h2>Domande frequenti</h2>
     <div class="faq">
       <details><summary>Perché il Mac dice che non può verificare l'app?</summary><p>Flip non è ancora firmata con un account sviluppatore Apple. Dopo il primo tentativo di apertura vai in Impostazioni di Sistema → Privacy e sicurezza e premi «Apri comunque» accanto a Flip. Serve solo la prima volta.</p></details>
       <details><summary>Windows mostra «PC protetto da Windows». Che faccio?</summary><p>Scegli «Ulteriori informazioni», poi «Esegui comunque».</p></details>
@@ -689,12 +730,11 @@
     finish();
   });
 
-  // Cerchio e freccia «a mano»: stessa costruzione dell'app (raggio che ondeggia, tratto che supera l'inizio, freccia curva con due trattini).
+  // Cerchio e freccia «a mano»: stessa costruzione dell'app (raggio che ondeggia, tratto che supera l'inizio,
+  // freccia curva con due trattini). `k` scala le misure dell'app (in punti dello schermo); W e H sono l'area disponibile.
   const R = (a, b) => a + Math.random() * (b - a);
-  document.querySelectorAll('svg[data-mark]').forEach(svg => {
-    const box = svg.parentElement.getBoundingClientRect(), el = svg.parentElement.querySelector('.mk').getBoundingClientRect(), k = 600 / box.width;
-    const x = (el.left - box.left) * k, y = (el.top - box.top) * k, w = el.width * k, h = el.height * k;
-    const L = { x: x - 4.5, y: y - 3, w: w + 9, h: h + 6 };
+  function ink(el, W, H, k, arrow, side) {
+    const L = { x: el.x - 9 * k, y: el.y - 6 * k, w: el.w + 18 * k, h: el.h + 12 * k };
     const mx = L.x + L.w / 2, my = L.y + L.h / 2;
     const start = R(-2.6, -1.9), turn = 2 * Math.PI + R(.25, .55), a = R(0, 6.28), b = R(0, 6.28), tilt = R(-.08, .08), drift = R(.04, .09);
     let d = '';
@@ -704,16 +744,21 @@
       const px = Math.cos(ang) * r * L.w / 2 * 1.12, py = Math.sin(ang) * r * L.h / 2 * 1.25;
       d += (i ? 'L' : 'M') + (mx + px * Math.cos(tilt) - py * Math.sin(tilt)).toFixed(1) + ' ' + (my + px * Math.sin(tilt) + py * Math.cos(tilt)).toFixed(1);
     }
-    if (svg.hasAttribute('data-arrow')) {
-      const right = mx < 300, top = my < 187.5;
-      const tip = { x: right ? L.x + L.w + 5 : L.x - 5, y: top ? L.y + L.h + 3 : L.y - 3 };
-      const tail = { x: tip.x + (right ? 75 : -75) + R(-7, 7), y: tip.y + (top ? 48 : -48) + R(-6, 6) };
-      const bend = { x: (tail.x + tip.x) / 2 + R(-5, 5), y: tail.y + R(-4, 4) };
-      const dir = Math.atan2(tip.y - bend.y, tip.x - bend.x);
-      d += `M${tail.x} ${tail.y}Q${bend.x} ${bend.y} ${tip.x} ${tip.y}`;
-      for (const [s, l] of [[.5, 13], [-.42, 11]]) d += `M${tip.x} ${tip.y}L${tip.x - Math.cos(dir + s) * l} ${tip.y - Math.sin(dir + s) * l}`;
-    }
-    svg.querySelector('path').setAttribute('d', d);
+    if (!arrow) return { d };
+    const right = side ? side.right : mx < W / 2, top = side ? side.top : my < H / 2;
+    const tip = { x: right ? L.x + L.w + 10 * k : L.x - 10 * k, y: top ? L.y + L.h + 6 * k : L.y - 6 * k };
+    const tail = { x: tip.x + (right ? 150 : -150) * k + R(-14, 14) * k, y: tip.y + (top ? 95 : -95) * k + R(-12, 12) * k };
+    tail.x = Math.max(12, Math.min(W - 12, tail.x));
+    const bend = { x: (tail.x + tip.x) / 2 + R(-10, 10) * k, y: tail.y + R(-8, 8) * k };
+    const dir = Math.atan2(tip.y - bend.y, tip.x - bend.x);
+    d += `M${tail.x} ${tail.y}Q${bend.x} ${bend.y} ${tip.x} ${tip.y}`;
+    for (const [s, l] of [[.5, 26], [-.42, 22]]) d += `M${tip.x} ${tip.y}L${tip.x - Math.cos(dir + s) * l * k} ${tip.y - Math.sin(dir + s) * l * k}`;
+    return { d, tail };
+  }
+  document.querySelectorAll('svg[data-mark]').forEach(svg => {
+    const box = svg.parentElement.getBoundingClientRect(), el = svg.parentElement.querySelector('.mk').getBoundingClientRect(), k = 600 / box.width;
+    const m = ink({ x: (el.left - box.left) * k, y: (el.top - box.top) * k, w: el.width * k, h: el.height * k }, 600, 375, .5, svg.hasAttribute('data-arrow'));
+    svg.querySelector('path').setAttribute('d', m.d);
   });
   // Su Windows il pulsante pieno diventa quello per Windows.
   if (/Windows/.test(navigator.userAgent)) {
@@ -721,6 +766,104 @@
     document.getElementById('dl-win').classList.remove('ghost');
     document.querySelector('.cta').prepend(document.getElementById('dl-win'));
   }
+
+  // La notch della pagina si comporta come quella dell'app: tieni premuto Spazio (o la notch stessa), parla, rilascia.
+  const notch = document.getElementById('notch'), nlabel = document.getElementById('nlabel'), nans = document.getElementById('nans'), nface = document.getElementById('nface');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const idle = matchMedia('(pointer: coarse)').matches ? 'Prova: tieni premuto qui' : 'Prova: tieni premuto Spazio';
+  const lines = [
+    'Ciao, sono Flip! Qui sulla pagina non ti sento davvero, ma sul tuo computer ti risponderei così, guardando lo schermo.',
+    'Sul tuo computer vedrei quello che vedi tu: potrei indicarti dove cliccare, o farlo io al posto tuo.',
+    'Vuoi provarmi davvero? Scaricami: tieni premuto un tasto, parla, e io mi metto al lavoro.'
+  ];
+  let mode = 'idle', said = 0, timers = [];
+  const later = (f, ms) => timers.push(setTimeout(f, ms));
+  function set(m, label) {
+    mode = m; notch.dataset.mode = m; nlabel.textContent = label;
+    nface.classList.toggle('talk', m === 'answer');
+  }
+  function rest() { timers.forEach(clearTimeout); timers = []; nans.textContent = ''; set('idle', idle); }
+  function listen() {
+    if (mode === 'listening') return;
+    rest(); set('listening', 'Ti ascolto');
+  }
+  function release() {
+    if (mode !== 'listening') return;
+    set('thinking', 'Ci penso');
+    later(() => {
+      set('answer', 'Sto parlando');
+      const words = lines[said++ % lines.length].split(' ');
+      words.forEach((w, i) => later(() => { nans.textContent += (i ? ' ' : '') + w; }, still ? 0 : i * 170));
+      // Finita la voce resta solo il testo, come nell'app; poi la notch si richiude.
+      later(() => { notch.dataset.mode = 'said'; nface.classList.remove('talk'); }, still ? 0 : words.length * 170 + 300);
+      later(rest, words.length * 170 + 6000);
+    }, 900);
+  }
+  const typing = t => t.closest?.('input, textarea, select, button, a, summary, [contenteditable]') || document.getElementById('gate').open;
+  addEventListener('keydown', e => {
+    if (e.code !== 'Space' || typing(e.target)) return;
+    e.preventDefault();
+    if (!e.repeat) listen();
+  });
+  addEventListener('keyup', e => { if (e.code === 'Space' && mode === 'listening') release(); });
+  notch.addEventListener('pointerdown', e => { e.preventDefault(); notch.setPointerCapture(e.pointerId); listen(); });
+  notch.addEventListener('pointerup', release);
+  notch.addEventListener('pointercancel', release);
+  notch.addEventListener('contextmenu', e => e.preventDefault());
+  rest();
+
+  // All'apertura Flip esce dalla notch, vola accanto al pulsante di download e lo segna, come fa sullo schermo.
+  const hero = document.querySelector('.hero'), target = document.querySelector('.cta .pill');
+  if (!still) setTimeout(() => {
+    const H = hero.getBoundingClientRect(), b = target.getBoundingClientRect(), f = nface.getBoundingClientRect();
+    if (b.bottom > innerHeight || b.left - H.left < 190) return; // pulsante fuori vista o senza spazio accanto (telefono): niente spettacolo
+    const m = ink({ x: b.left - H.left, y: b.top - H.top, w: b.width, h: b.height }, H.width, H.height, 1, true, { right: false, top: false });
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'heroink'); svg.setAttribute('viewBox', `0 0 ${H.width} ${H.height}`);
+    svg.innerHTML = `<path pathLength="1" d="${m.d}"/>`;
+    const fly = document.createElement('div');
+    fly.className = 'dolphin talk flyer';
+    fly.innerHTML = '<span class="bubble">Scaricami da qui!</span>';
+    hero.append(svg, fly);
+    const from = [f.left - H.left, f.top - H.top], to = [m.tail.x - 30, m.tail.y - 54];
+    const path = [`translate(${from[0]}px,${from[1]}px) scale(.62)`, `translate(${(from[0] + to[0]) / 2 + 60}px,${Math.min(from[1], to[1]) - 10}px) scale(1.15)`, `translate(${to[0]}px,${to[1]}px) scale(1)`];
+    nface.style.visibility = 'hidden';
+    fly.animate(path.map(t => ({ transform: t })), { duration: 1300, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' }).finished.then(() => {
+      fly.classList.add('said');
+      svg.classList.add('go');
+      setTimeout(() => {
+        svg.classList.add('gone'); fly.classList.remove('said');
+        fly.animate(path.slice().reverse().map(t => ({ transform: t })), { duration: 1100, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' }).finished.then(() => {
+          fly.remove(); svg.remove(); nface.style.visibility = '';
+        });
+      }, 3200);
+    });
+  }, 1100);
+
+  // Al clic la goccia fa uno splash: un'onda che si allarga e goccioline che saltano e ricadono.
+  if (!still) addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch') return;
+    const box = document.createElement('div');
+    box.className = 'splash';
+    box.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    const ring = document.createElement('b');
+    box.append(ring);
+    ring.animate([{ width: '0px', height: '0px', margin: '0', opacity: .9 }, { width: '70px', height: '22px', margin: '-11px 0 0 -35px', opacity: 0 }], { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' });
+    for (let n = 0; n < 14; n++) {
+      const d = document.createElement('i'), size = R(4, 9), ang = R(-165, -15) * Math.PI / 180, v = R(110, 230), g = 520, t = R(.55, .8);
+      d.style.width = d.style.height = size + 'px';
+      d.style.left = d.style.top = -size / 2 + 'px';
+      box.append(d);
+      const frames = [];
+      for (let k = 0; k <= 8; k++) {
+        const s = k / 8 * t;
+        frames.push({ transform: `translate(${Math.cos(ang) * v * s}px, ${Math.sin(ang) * v * s + g * s * s}px) scale(${1 - k / 8 * .5})`, opacity: k < 6 ? 1 : 1 - (k - 5) / 3 });
+      }
+      d.animate(frames, { duration: t * 1000, easing: 'linear', fill: 'forwards' });
+    }
+    document.body.append(box);
+    setTimeout(() => box.remove(), 1000);
+  }, true);
 </script>
 </body>
 </html>
