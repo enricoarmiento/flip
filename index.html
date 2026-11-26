@@ -307,12 +307,20 @@
   .heroink.gone { transition:opacity .5s; opacity:0; }
   .flyer { position:absolute; left:0; top:0; width:72px; z-index:4; pointer-events:none; transform-origin:0 0; }
   .flyer .bubble { right:52px; left:auto; top:-24px; opacity:0; transition:opacity .3s; font-size:14px; }
-  .flyer.said .bubble { opacity:1; }
+  .flyer.speaks .bubble { opacity:1; }
 
   /* cursore a goccia: la punta è il punto che clicca */
   html { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 2.5C14 2.5 5.5 12.6 5.5 18.2a8.5 8.5 0 0 0 17 0C22.5 12.6 14 2.5 14 2.5z' fill='%234fa7ee' stroke='%23061c33' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cellipse cx='10.6' cy='18.6' rx='1.7' ry='3' fill='%23fff' opacity='.75' transform='rotate(-18 10.6 18.6)'/%3E%3C/svg%3E") 14 3, auto; }
   a, button, summary, label, .notch, [data-dl], [data-plan] { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 2.5C14 2.5 5.5 12.6 5.5 18.2a8.5 8.5 0 0 0 17 0C22.5 12.6 14 2.5 14 2.5z' fill='%238cc8f7' stroke='%23061c33' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cellipse cx='10.6' cy='18.6' rx='1.7' ry='3' fill='%23fff' opacity='.75' transform='rotate(-18 10.6 18.6)'/%3E%3C/svg%3E") 14 3, pointer; }
   input, textarea { cursor:text; }
+
+  /* goccia viva: segue il mouse, si allunga e si orienta nel verso del movimento, da ferma torna tonda */
+  .drop-on, .drop-on * { cursor:none; }
+  .drop-on dialog, .drop-on dialog * { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 2.5C14 2.5 5.5 12.6 5.5 18.2a8.5 8.5 0 0 0 17 0C22.5 12.6 14 2.5 14 2.5z' fill='%234fa7ee' stroke='%23061c33' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cellipse cx='10.6' cy='18.6' rx='1.7' ry='3' fill='%23fff' opacity='.75' transform='rotate(-18 10.6 18.6)'/%3E%3C/svg%3E") 14 3, auto; }
+  .drop-on dialog input { cursor:text; }
+  .dc { position:fixed; left:0; top:0; width:60px; height:40px; margin:-20px 0 0 -30px; pointer-events:none; z-index:1001; opacity:0; transition:opacity .2s; will-change:transform; }
+  .dc.in { opacity:1; }
+  .dc svg { display:block; width:100%; height:100%; overflow:visible; }
   .splash { position:fixed; left:0; top:0; pointer-events:none; z-index:1000; }
   .splash i { position:absolute; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff 0 18%, #4fa7ee 22%); }
   .splash b { position:absolute; border-radius:50%; border:2px solid #4fa7ee; }
@@ -816,7 +824,7 @@
   const hero = document.querySelector('.hero'), target = document.querySelector('.cta .pill');
   if (!still) setTimeout(() => {
     const H = hero.getBoundingClientRect(), b = target.getBoundingClientRect(), f = nface.getBoundingClientRect();
-    if (b.bottom > innerHeight || b.left - H.left < 190) return; // pulsante fuori vista o senza spazio accanto (telefono): niente spettacolo
+    if (b.bottom > innerHeight || b.left - H.left < 340) return; // pulsante fuori vista o senza spazio accanto (telefono): niente spettacolo
     const m = ink({ x: b.left - H.left, y: b.top - H.top, w: b.width, h: b.height }, H.width, H.height, 1, true, { right: false, top: false });
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'heroink'); svg.setAttribute('viewBox', `0 0 ${H.width} ${H.height}`);
@@ -829,10 +837,10 @@
     const path = [`translate(${from[0]}px,${from[1]}px) scale(.62)`, `translate(${(from[0] + to[0]) / 2 + 60}px,${Math.min(from[1], to[1]) - 10}px) scale(1.15)`, `translate(${to[0]}px,${to[1]}px) scale(1)`];
     nface.style.visibility = 'hidden';
     fly.animate(path.map(t => ({ transform: t })), { duration: 1300, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' }).finished.then(() => {
-      fly.classList.add('said');
+      fly.classList.add('speaks');
       svg.classList.add('go');
       setTimeout(() => {
-        svg.classList.add('gone'); fly.classList.remove('said');
+        svg.classList.add('gone'); fly.classList.remove('speaks');
         fly.animate(path.slice().reverse().map(t => ({ transform: t })), { duration: 1100, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' }).finished.then(() => {
           fly.remove(); svg.remove(); nface.style.visibility = '';
         });
@@ -864,6 +872,49 @@
     document.body.append(box);
     setTimeout(() => box.remove(), 1000);
   }, true);
+
+  // La goccia: posizione che insegue il mouse, un vettore di velocità smussato per il verso, e una molla
+  // per l'allungamento, così quando si ferma oscilla un attimo e torna tonda.
+  if (!still && matchMedia('(pointer: fine)').matches) {
+    const dc = document.createElement('div');
+    dc.className = 'dc';
+    dc.innerHTML = '<svg viewBox="-30 -20 60 40"><defs><radialGradient id="dg" cx=".62" cy=".36" r=".75"><stop offset="0" stop-color="#fff"/><stop offset=".16" stop-color="#cfe8fc"/><stop offset=".55" stop-color="#4fa7ee"/><stop offset="1" stop-color="#2a7fcf"/></radialGradient></defs><path fill="url(#dg)" stroke="#061c33" stroke-width="1.5" stroke-linejoin="round"/><ellipse cx="3" cy="-3.6" rx="2.6" ry="1.6" fill="#fff" opacity=".8"/></svg>';
+    document.body.append(dc);
+    const body = dc.querySelector('path'), R0 = 9;
+    // Goccia lungo l'asse x: tonda davanti (raggio R0), coda appuntita dietro lunga `t` (0 = cerchio).
+    const shape = t => {
+      if (t < .03) return `M${R0} 0A${R0} ${R0} 0 1 1 ${-R0} 0A${R0} ${R0} 0 1 1 ${R0} 0Z`;
+      const d = R0 + t * 15, a = Math.acos(R0 / d), px = R0 * Math.cos(Math.PI - a), py = R0 * Math.sin(Math.PI - a);
+      return `M${-d} 0L${px.toFixed(2)} ${(-py).toFixed(2)}A${R0} ${R0} 0 1 1 ${px.toFixed(2)} ${py.toFixed(2)}Z`;
+    };
+    document.documentElement.classList.add('drop-on');
+    let mx = -99, my = -99, x = -99, y = -99, vx = 0, vy = 0, ang = 0, st = 0, sv = 0, hot = 0, hotT = 0;
+    const HOT = 'a, button, summary, label, .notch, [data-dl], [data-plan]';
+    addEventListener('pointermove', e => {
+      if (e.pointerType === 'touch') return;
+      if (x < -90) { x = e.clientX; y = e.clientY; }
+      mx = e.clientX; my = e.clientY; dc.classList.add('in');
+      hotT = e.target.closest?.(HOT) ? 1 : 0;
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => dc.classList.remove('in'));
+    addEventListener('blur', () => dc.classList.remove('in'));
+    addEventListener('pointerdown', e => { if (e.pointerType !== 'touch') sv -= .55; }, true); // schiacciata al clic
+    (function tick() {
+      const nx = x + (mx - x) * .42, ny = y + (my - y) * .42;
+      vx += ((nx - x) - vx) * .3; vy += ((ny - y) - vy) * .3;
+      x = nx; y = ny;
+      const speed = Math.hypot(vx, vy);
+      if (speed > .4) ang = Math.atan2(vy, vx);
+      sv += (Math.min(speed / 14, 1) - st) * .16; sv *= .8; st += sv;   // molla: allunga, poi rimbalza e si posa
+      hot += (hotT - hot) * .2;
+      const k = Math.max(st, -.35), size = 1 + hot * .35;
+      const tip = Math.max(0, Math.min(1, st * 1.6));                     // quanto è appuntita la coda
+      body.setAttribute('d', shape(tip));
+      dc.style.transform = `translate(${x}px, ${y}px) rotate(${ang}rad) scale(${(1 + k * .15) * size}, ${(1 - k * .22) * size})`;
+      dc.style.visibility = document.getElementById('gate').open ? 'hidden' : '';
+      requestAnimationFrame(tick);
+    })();
+  }
 </script>
 </body>
 </html>
