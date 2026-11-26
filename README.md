@@ -1,4 +1,4 @@
-# ClinicalEye
+# Flip
 
 Assistente per Mac che vive nella notch: tieni premuto un tasto, parla, e lui vede lo schermo, risponde, indica e agisce.
 
