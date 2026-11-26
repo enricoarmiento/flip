@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClinicalEye: parla al tuo Mac, lui guarda e agisce</title>
+<meta name="description" content="ClinicalEye vive nella notch del Mac: tieni premuto un tasto, parla, e lui vede lo schermo, risponde, indica e fa le cose al posto tuo. Anche con modelli che girano sul tuo Mac.">
+<style>
+  :root { --ink:#f4f4f1; --ink2:#a9a9a3; --lime:#d4f06b; --card:#151515; --line:#262626; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0b0b0b; color:var(--ink); font:17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+  .notch { width:min(420px, 78vw); margin:0 auto; background:#000; border-radius:0 0 30px 30px; padding:14px 26px 16px; display:flex; align-items:center; justify-content:space-between; font-weight:600; font-size:15px; box-shadow:0 12px 40px rgba(0,0,0,.6); }
+  .wave { display:flex; gap:3px; align-items:center; height:18px; }
+  .wave i { width:3px; border-radius:2px; background:var(--lime); animation:w 1s ease-in-out infinite; }
+  .wave i:nth-child(1){height:6px;animation-delay:0s} .wave i:nth-child(2){height:14px;animation-delay:.12s} .wave i:nth-child(3){height:18px;animation-delay:.24s} .wave i:nth-child(4){height:10px;animation-delay:.36s} .wave i:nth-child(5){height:5px;animation-delay:.48s}
+  @keyframes w { 0%,100%{transform:scaleY(.45)} 50%{transform:scaleY(1)} }
+  @media (prefers-reduced-motion: reduce) { .wave i { animation:none } }
+  main { max-width:760px; margin:0 auto; padding:56px 24px 80px; }
+  h1 { font-size:clamp(34px, 6vw, 52px); line-height:1.08; letter-spacing:-.02em; margin:0 0 18px; }
+  .lead { font-size:20px; color:var(--ink2); margin:0 0 30px; max-width:36em; }
+  .button { display:inline-block; background:var(--lime); color:#111; font-weight:700; text-decoration:none; padding:15px 28px; border-radius:999px; font-size:18px; }
+  .button:hover, .button:focus-visible { filter:brightness(1.08); outline:3px solid #fff3; outline-offset:3px; }
+  .small { color:var(--ink2); font-size:14.5px; margin:14px 0 0; }
+  h2 { font-size:24px; margin:56px 0 16px; letter-spacing:-.01em; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:18px 20px; }
+  .card b { display:block; margin-bottom:4px; }
+  .card span { color:var(--ink2); font-size:15.5px; }
+  ol { padding-left:22px; margin:0; } li { margin:0 0 10px; }
+  kbd { background:#1d1d1d; border:1px solid #333; border-radius:7px; padding:1px 7px; font:inherit; font-size:15px; }
+  code { background:#1d1d1d; border-radius:6px; padding:2px 6px; font-size:15px; }
+  .note { border-left:3px solid var(--lime); padding:4px 0 4px 16px; color:var(--ink2); margin:18px 0 0; }
+  footer { color:var(--ink2); font-size:14px; margin-top:64px; border-top:1px solid var(--line); padding-top:20px; }
+  a { color:var(--lime); }
+</style>
+</head>
+<body>
+<div class="notch" aria-hidden="true"><span>Ti ascolto</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+<main>
+  <h1>Parla al tuo Mac.<br>Lui guarda e agisce.</h1>
+  <p class="lead">ClinicalEye vive nella notch. Tieni premuto un tasto, parla: vede lo schermo, ti risponde, ti indica dove guardare e fa le cose al posto tuo.</p>
+  <a class="button" href="https://github.com/enricoarmiento/clinical-eye/releases/latest/download/ClinicalEye.zip">Scarica per Mac</a>
+  <p class="small">Versione 0.1 · macOS 14 o successivo · solo Mac con Apple Silicon (M1 e seguenti) · 1,3 MB</p>
+
+  <h2>Cosa fa</h2>
+  <div class="grid">
+    <div class="card"><b>Risponde</b><span>Chiedi qualcosa su ciò che hai davanti: lo legge e risponde in una frase.</span></div>
+    <div class="card"><b>Indica</b><span>Cerchia e punta con una freccia l'elemento di cui parla.</span></div>
+    <div class="card"><b>Agisce</b><span>Apre programmi, scrive, cerca in rete, gestisce calendario, file e bozze di email. Anche restando dietro la finestra che stai usando.</span></div>
+    <div class="card"><b>Crea</b><span>Scrive codice, lo prova e mostra il risultato in un pannello: animazioni, grafici, piccoli programmi.</span></div>
+  </div>
+
+  <h2>Dove gira l'intelligenza</h2>
+  <div class="grid">
+    <div class="card"><b>Sul tuo Mac</b><span>Con <a href="https://ollama.com">Ollama</a>: niente esce dal computer. Più lento, gratuito.</span></div>
+    <div class="card"><b>Con le tue chiavi</b><span>Gemini o un servizio compatibile con OpenAI. Più veloce; paghi il fornitore a consumo.</span></div>
+  </div>
+  <p class="note">La voce è facoltativa e richiede una tua chiave ElevenLabs. Senza, le risposte restano scritte nella notch.</p>
+
+  <h2>Installazione</h2>
+  <ol>
+    <li>Scarica <code>ClinicalEye.zip</code> e aprilo: compare <code>ClinicalEye.app</code>. Trascinala in <b>Applicazioni</b>.</li>
+    <li>Aprila. macOS dirà che non può verificarla: l'app non è ancora firmata con un account sviluppatore Apple. Chiudi l'avviso.</li>
+    <li>Vai in <b>Impostazioni di Sistema → Privacy e sicurezza</b>, scorri in fondo e premi <b>Apri comunque</b> accanto a ClinicalEye. Serve solo la prima volta.</li>
+    <li>Segui la guida: tre permessi (microfono, accessibilità, registrazione schermo) e la scelta del modello.</li>
+    <li>Tieni premuto <kbd>⌥</kbd> <kbd>Spazio</kbd>, parla, rilascia.</li>
+  </ol>
+
+  <h2>Da sapere</h2>
+  <ul>
+    <li>È una versione di prova: funziona, ma aspettati imperfezioni.</li>
+    <li>Con i modelli sul Mac servono almeno 16 GB di memoria per un uso comodo.</li>
+    <li>Le chiavi restano in un file sul tuo Mac, leggibile solo dal tuo utente. Non vengono mai inviate a noi.</li>
+    <li>Invii di email, eliminazioni e spese chiedono sempre conferma.</li>
+  </ul>
+
+  <footer>ClinicalEye · progetto di Enrico Armiento · <a href="https://github.com/enricoarmiento/clinical-eye/releases">tutte le versioni</a></footer>
+</main>
+</body>
+</html>
